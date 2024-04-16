@@ -18,13 +18,24 @@ void inicializadorMatrizRandom(int *matriz, int filas, int columnas, int min_val
 }
 
 
+void mostrar_matriz(int *matriz, int filas, int columnas){
+    for (int i = 0; i < filas; i++)
+    {
+        printf("\n");
+        for (int j = 0; j < columnas; j++)
+        {
+            printf("\t%d", *(matriz+i*columnas+j));
+        }
+    }
+    printf("\n\n");
+}
 
 int main(){
     int anios=5, meses=12;
     int matriz[anios][meses];
 
     inicializadorMatrizRandom(&matriz[0][0], anios, meses, 10000, 50000);
-
+    mostrar_matriz(*matriz, anios, meses);
 
     return 0;
 }
