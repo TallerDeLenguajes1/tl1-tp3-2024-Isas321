@@ -47,6 +47,31 @@ void gananciaPorAnio(int *matriz, int anios, int meses){
     printf("\n\n");
 }
 
+void min_max_ganancia(int *matriz, int anios, int meses){
+    int min, max, aux, anio_min, mes_min, anio_max, mes_max;
+    min=*matriz;
+    max=*matriz;
+    for (int i = 0; i < anios; i++)
+    {
+        for (int j = 0; j < meses; j++)
+        {
+            if(min>*(matriz+i*meses+j)){
+                min=*(matriz+i*meses+j);
+                anio_min=i;
+                mes_min=j;
+            }
+            if(max<*(matriz+i*meses+j)){
+                max=*(matriz+i*meses+j);
+                anio_max=i;
+                mes_max=j;
+            }
+        }
+    }
+    printf("\n\tEl minimo de ganancia sucedio en el anio:%d mes:%d. Minimo=%d", anio_min, mes_min, min);
+    printf("\n\tEl maximo de ganancia sucedio en el anio:%d mes:%d. Maximo=%d", anio_max, mes_max, max);
+    printf("\n\n");
+}
+
 int main(){
     int anios=5, meses=12;
     int matriz[anios][meses];
@@ -54,8 +79,10 @@ int main(){
     inicializadorMatrizRandom(&matriz[0][0], anios, meses, 10000, 50000);
     mostrar_matriz(*matriz, anios, meses);
     gananciaPorAnio(*matriz, anios, meses);
+    min_max_ganancia(*matriz, anios, meses);
 
     return 0;
 }
+
 
 
