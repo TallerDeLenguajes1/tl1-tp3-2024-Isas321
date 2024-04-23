@@ -35,7 +35,6 @@ void gananciaPorAnio(int *matriz, int anios, int meses){
     for (int i = 0; i < anios; i++)
     {
         suma=0;
-        promedio=suma/
         printf("\n");
         for (int j = 0; j < meses; j++)
         {
@@ -67,8 +66,8 @@ void min_max_ganancia(int *matriz, int anios, int meses){
             }
         }
     }
-    printf("\n\tEl minimo de ganancia sucedio en el anio:%d mes:%d. Minimo=%d", anio_min, mes_min, min);
-    printf("\n\tEl maximo de ganancia sucedio en el anio:%d mes:%d. Maximo=%d", anio_max, mes_max, max);
+    printf("\n\tEl minimo de ganancia sucedio en el anio:%d mes:%d es de Minimo=%d", anio_min, mes_min, min);
+    printf("\n\tEl maximo de ganancia sucedio en el anio:%d mes:%d es de Maximo=%d", anio_max, mes_max, max);
     printf("\n\n");
 }
 
@@ -80,6 +79,7 @@ int main(){
     mostrar_matriz(*matriz, anios, meses);
     gananciaPorAnio(*matriz, anios, meses);
     min_max_ganancia(*matriz, anios, meses);
+    getchar();
 
     return 0;
 }
