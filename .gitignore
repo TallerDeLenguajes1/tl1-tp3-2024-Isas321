@@ -73,6 +73,9 @@ dkms.conf
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 
+### VisualStudioCode - Carpeta ###
+.vscode/
+
 # Local History for Visual Studio Code
 .history/
 
