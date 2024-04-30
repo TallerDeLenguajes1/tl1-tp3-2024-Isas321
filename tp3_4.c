@@ -31,21 +31,29 @@ void cargar_cliente(Cliente **cliente, int cantidad_clientes);
 float costo_total_producto(Producto *prod);
 
 int main(){
-  int cantidad_clientes, id_cliente, i=0;
-  float suma=0, total_a_pagar;
+  int cantidad_clientes, id_cliente,cantidad, i=0;
+  float suma=0, total_a_pagar, costo_producto;
+  float precio;
   cantidad_clientes = cant_clientes();
   Cliente **clientes=(Cliente **)malloc(cantidad_clientes*sizeof(Cliente *));
   cargar_cliente(clientes, cantidad_clientes);
 
   for (i = 0; i < cantidad_clientes; i++)
   {
+    total_a_pagar=0;
     printf("\n\n\nNombre del cliente: ");
     puts(clientes[i]->NombreCliente);
     mostrar_productos(clientes[i]->Productos, clientes[i]->CantidadProductosAPedir);
-    suma+=costo_total_producto(clientes[i]->Productos);
+    for (int j = 0; j < clientes[i]->CantidadProductosAPedir; j++)
+    {
+        precio = clientes[i]->Productos[j].PrecioUnitario;
+        cantidad = clientes[i]->Productos[j].Cantidad;
+        costo_producto=(float)precio*cantidad;
+        total_a_pagar=costo_producto + total_a_pagar;
+    }
+    printf("\nTotal a pagar por el cliente %s: %f\n", clientes[i]->NombreCliente, total_a_pagar);
   }
-  total_a_pagar=suma/i;
-  printf("#####%f", total_a_pagar);
+  
   getchar();
   return 0;
 }
@@ -99,6 +107,7 @@ void cargar_cliente(Cliente **cliente, int cantidad_clientes){
     cliente[i]->NombreCliente = (char *)malloc((strlen(buffer)+1)*sizeof(char));
     strcpy(cliente[i]->NombreCliente, buffer);
     cliente[i]->CantidadProductosAPedir=generador_num_random(1,5);
+    //printf("\n*#Cant de prod a pedir: %d", cliente[i]->CantidadProductosAPedir);
     cliente[i]->Productos=(Producto * )malloc(cliente[i]->CantidadProductosAPedir*sizeof(Producto));
     carga_productos(cliente[i]->Productos, cliente[i]->CantidadProductosAPedir);
   }
