@@ -15,35 +15,40 @@ typedef struct  {
 int ClienteID; // Numerado en el ciclo iterativo
 char *NombreCliente; // Ingresado por usuario
 int CantidadProductosAPedir; // (aleatorio entre 1 y 5)
-Producto *Productos; //El tamaño de este arreglo depende de la variable
+Producto *Productos; 
+//es un puntero a una estructura Producto. Esto significa que en cada instancia de la estructura Cliente, 
+//el campo Productos apunta a un arreglo dinámico de estructuras Producto.
+//El tamaño de este arreglo depende de la variable
 // “CantidadProductosAPedir”
 } Cliente;
 
 
-
 int cant_clientes();
 int generador_num_random(int min, int max);
-void carga_nombre(int posicion, char *buffer);
 void carga_productos(Producto *productos, int cant_productos);
 void mostrar_productos(Producto *productos, int cant_productos);
-void cargar_cliente(Cliente **cliente, int id_cliente);
-float costo_total_producto(Producto prod);
+void cargar_cliente(Cliente **cliente, int cantidad_clientes);
+float costo_total_producto(Producto *prod);
 
 int main(){
-  int cantidad_clientes, id_cliente;
+  int cantidad_clientes, id_cliente, i=0;
+  float suma=0, total_a_pagar;
   cantidad_clientes = cant_clientes();
   Cliente **clientes=(Cliente **)malloc(cantidad_clientes*sizeof(Cliente *));
-  for (int i = 0; i < cantidad_clientes; i++)
+  cargar_cliente(clientes, cantidad_clientes);
+
+  for (i = 0; i < cantidad_clientes; i++)
   {
-    id_cliente=i+1;
-    cargar_cliente(clientes,id_cliente);
+    printf("\n\n\nNombre del cliente: ");
+    puts(clientes[i]->NombreCliente);
+    mostrar_productos(clientes[i]->Productos, clientes[i]->CantidadProductosAPedir);
+    suma+=costo_total_producto(clientes[i]->Productos);
   }
+  total_a_pagar=suma/i;
+  printf("#####%f", total_a_pagar);
   getchar();
   return 0;
 }
-
-
-
 
 
 
@@ -59,14 +64,8 @@ int generador_num_random(int min, int max){
     return (min+rand()%(max-min+1));
 }
 
-void carga_nombre(int id_cliente, char *buffer){
-        printf("\nIngrese nombre [%d]: ", id_cliente);
-        gets(buffer);
-}
-
 void carga_productos(Producto *productos, int cant_productos){
   int id;
-  printf("\nentro carga productos");
   for (int i = 0; i < cant_productos; i++)
   {
     id=generador_num_random(1,5);
@@ -75,7 +74,6 @@ void carga_productos(Producto *productos, int cant_productos){
     productos[i].TipoProducto=TiposProductos[id-1];
     productos[i].PrecioUnitario=(float)generador_num_random(1,10);
   }
-   mostrar_productos(productos, cant_productos);
 }
 
 void mostrar_productos(Producto *productos, int cant_productos){
@@ -86,29 +84,28 @@ void mostrar_productos(Producto *productos, int cant_productos){
     printf("\nTipo de producto: ");
     puts(productos[i].TipoProducto);
     printf("Precio: %f", productos[i].PrecioUnitario);
-    printf("\nCosto total = %f\n\n", costo_total_producto(productos[i]));
+    printf("\nCosto por producto = %f\n\n", costo_total_producto(&productos[i])); //Se debe pasar un puntero a productos[i] en lugar de productos[i]
   }
 }
 
-void cargar_cliente(Cliente **cliente, int id_cliente){
+void cargar_cliente(Cliente **cliente, int cantidad_clientes){
   char buffer[100];
-  *cliente = (Cliente *)malloc(sizeof(Cliente));
-  (*cliente)->ClienteID = id_cliente;
-  carga_nombre(id_cliente, buffer);
-  (*cliente)->NombreCliente = (char *)malloc((strlen(buffer)+1)*sizeof(char));
-  strcpy((*cliente)->NombreCliente, buffer);
-  (*cliente)->CantidadProductosAPedir=generador_num_random(1,5);
-  (*cliente)->Productos=malloc((*cliente)->CantidadProductosAPedir*sizeof(Producto));
-  carga_productos((*cliente)->Productos, (*cliente)->CantidadProductosAPedir);
+  for (int i = 0; i < cantidad_clientes; i++)
+  {
+    cliente[i] = (Cliente *)malloc(sizeof(Cliente));
+    cliente[i]->ClienteID = i+1;
+    printf("\nIngrese nombre de cliente [%d]: ", cliente[i]->ClienteID);
+    gets(buffer);
+    cliente[i]->NombreCliente = (char *)malloc((strlen(buffer)+1)*sizeof(char));
+    strcpy(cliente[i]->NombreCliente, buffer);
+    cliente[i]->CantidadProductosAPedir=generador_num_random(1,5);
+    cliente[i]->Productos=(Producto * )malloc(cliente[i]->CantidadProductosAPedir*sizeof(Producto));
+    carga_productos(cliente[i]->Productos, cliente[i]->CantidadProductosAPedir);
+  }
 }
 
-float costo_total_producto(Producto prod){
-  float precio = prod.PrecioUnitario;
-  int cantidad = prod.Cantidad;
+float costo_total_producto(Producto *prod){
+  float precio = prod->PrecioUnitario;
+  int cantidad = prod->Cantidad;
   return (float)(precio*cantidad);
 }
-/* iv) Implemente una función que calcule el costo total de un producto. Esta función debe
-recibir como parámetro el producto y devolver el resultado de calcular la Cantidad por
-el PrecioUnitario.
- */
-
