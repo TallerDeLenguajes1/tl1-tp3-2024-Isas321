@@ -22,13 +22,13 @@ Producto *Productos;
 // “CantidadProductosAPedir”
 } Cliente;
 
-
 int cant_clientes();
 int generador_num_random(int min, int max);
 void carga_productos(Producto *productos, int cant_productos);
 void mostrar_productos(Producto *productos, int cant_productos);
 void cargar_cliente(Cliente **cliente, int cantidad_clientes);
 float costo_total_producto(Producto *prod);
+float total_a_pagar_por_cliente(Cliente *Cliente);
 
 int main(){
   int cantidad_clientes, id_cliente,cantidad, i=0;
@@ -40,25 +40,27 @@ int main(){
 
   for (i = 0; i < cantidad_clientes; i++)
   {
-    total_a_pagar=0;
     printf("\n\n\nNombre del cliente: ");
     puts(clientes[i]->NombreCliente);
     mostrar_productos(clientes[i]->Productos, clientes[i]->CantidadProductosAPedir);
-    for (int j = 0; j < clientes[i]->CantidadProductosAPedir; j++)
-    {
-        precio = clientes[i]->Productos[j].PrecioUnitario;
-        cantidad = clientes[i]->Productos[j].Cantidad;
-        costo_producto=(float)precio*cantidad;
-        total_a_pagar=costo_producto + total_a_pagar;
-    }
-    printf("\nTotal a pagar por el cliente %s: %f\n", clientes[i]->NombreCliente, total_a_pagar);
+    printf("\nTotal a pagar por el cliente %s: %f\n", clientes[i]->NombreCliente, total_a_pagar_por_cliente(clientes[i]));
   }
-  
   getchar();
   return 0;
 }
 
-
+float total_a_pagar_por_cliente(Cliente *Cliente){
+  float precio, costo_producto, total_a_pagar;
+  int cantidad;
+  for (int j = 0; j < Cliente->CantidadProductosAPedir; j++)
+  {
+      precio = Cliente->Productos[j].PrecioUnitario;
+      cantidad = Cliente->Productos[j].Cantidad;
+      costo_producto=(float)precio*cantidad;
+      total_a_pagar=costo_producto + total_a_pagar;
+  }
+  return total_a_pagar;
+}
 
 int cant_clientes(){
   int n;
